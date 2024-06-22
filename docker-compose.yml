@@ -13,5 +13,8 @@ services:
   
   app:
     image: silofn/cap
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     ports:
       - 3000:3000

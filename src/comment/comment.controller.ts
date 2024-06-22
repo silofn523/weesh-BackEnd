@@ -2,7 +2,7 @@
 import { Controller, Get, Post, Body, Param, Delete, ValidationPipe, NotFoundException, UseGuards } from '@nestjs/common'
 import { CommentService } from './comment.service'
 import { CreateCommentDto } from './dto/create-comment.dto'
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Comment } from './entities/comment.entity'
 import { Guard } from 'src/auth/guard/auth.guard'
 
@@ -16,6 +16,7 @@ export class CommentController {
     description: '또상 후기를 추가합니다.'
   })
   @ApiBody({ type: CreateCommentDto })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Post()
   public async create(@Body(ValidationPipe) createCommentDto: CreateCommentDto): Promise<{ success: boolean }> {
@@ -30,6 +31,7 @@ export class CommentController {
     summary: '모든 또상 상담 후기 조회',
     description: '상담 정보들을 불러옵니다.'
   })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get()
   public findAll(): Promise<Comment[]> {

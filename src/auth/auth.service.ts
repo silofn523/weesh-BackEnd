@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
+import { Injectable, InternalServerErrorException, NotAcceptableException, UnauthorizedException } from '@nestjs/common'
+import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt'
 import { UsersService } from 'src/users/users.service'
 import { LoginDto } from './dto/Login.Dto'
 import * as bcrypt from 'bcryptjs'
@@ -32,12 +32,27 @@ export class AuthService {
       })
     }
 
-    const payload = { username: dto.username }
-    const token = this.jwt.sign(payload)
+    const payload =  user.id 
+    const token = this.jwt.sign({ payload })
 
     return {
       success: true,
       token: token
+    }
+  }
+
+  public verifyToken(token: string) {
+    try {
+      const userId = this.jwt.verify(token) as { id: number }
+      return userId
+    } catch (e) {
+      if (e instanceof JsonWebTokenError)
+        throw new NotAcceptableException('TOKEN_MALFORMED')
+
+      if (e instanceof TokenExpiredError)
+        throw new UnauthorizedException('TOKEN_EXPIRED')
+
+      throw new InternalServerErrorException('JWT_SERVICE_ERROR')
     }
   }
 }

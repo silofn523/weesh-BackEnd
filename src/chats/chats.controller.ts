@@ -3,7 +3,7 @@ import { Body, Controller, Delete, Get, NotFoundException, Param, Post, UseGuard
 import { ChatsService } from './chats.service'
 import { CreateChatDto } from './dto/create-chat.dto'
 import { Chat } from './entities/chat.entity'
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Guard } from 'src/auth/guard/auth.guard'
 
 @ApiTags('Chats(채팅방)')
@@ -12,6 +12,7 @@ export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @ApiOperation({ summary: '채팅방 생성', description: '채팅방을 생성합니다' })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @ApiBody({ type: CreateChatDto })
   @Post()
@@ -20,6 +21,7 @@ export class ChatsController {
   }
 
   @ApiOperation({ summary: '전체 채팅방 목록 조회 ', description: '모든 채팅방을 조회합니다' })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get()
   public findAllChat(): Promise<Chat[]> {
@@ -27,6 +29,7 @@ export class ChatsController {
   }
 
   @ApiOperation({ summary: '채팅방 ID별로 조회 ', description: '채팅방을 조회합니다' })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get(':id')
   public async findOneChat(@Param('id') id: number): Promise<{ success: boolean; body: Chat }> {
@@ -45,6 +48,7 @@ export class ChatsController {
   }
 
   @ApiOperation({ summary: '채팅방 삭제 ', description: '채팅방을 삭제합니다' })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Delete(':id')
   public async deleteChat(@Param('id') id: number): Promise<{ success: boolean }> {

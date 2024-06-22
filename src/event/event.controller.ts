@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Param, Delete, UploadedFile, UseInterceptors, UseGuards, Res, Req } from '@nestjs/common'
 import { EventService } from './event.service'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Event } from './entities/event.entity'
 import { Guard } from 'src/auth/guard/auth.guard'
@@ -25,6 +25,7 @@ export class EventController {
 
   @ApiOperation({ summary: 'DB 이미지 업로드', description: '위클래스 이미지를 업로드.' })
   @UseInterceptors(FileInterceptor('img'))
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Post()
   public async uploadImg(@UploadedFile() image: Express.Multer.File): Promise<{ success: boolean }> {

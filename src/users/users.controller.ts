@@ -4,7 +4,7 @@ import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { Guard } from 'src/auth/guard/auth.guard'
 
 @ApiTags('User(사용자계정)')
@@ -33,7 +33,7 @@ export class UsersController {
     const { email, username } = createUserDto
 
     await this.usersService.checkUserEmailAndUsername(email, username)
-    await this.usersService.createUser(createUserDto)
+    await this.usersService.createAdmin(createUserDto)
 
     return {
       success: true
@@ -47,7 +47,7 @@ export class UsersController {
     const { email, username } = createUserDto
 
     await this.usersService.checkUserEmailAndUsername(email, username)
-    await this.usersService.createUser(createUserDto)
+    await this.usersService.createPeer(createUserDto)
 
     return {
       success: true
@@ -67,6 +67,7 @@ export class UsersController {
     summary: '하나의 사용자만 조회',
     description: '사용자 정보를 불러옵니다.'
   })
+  @ApiBearerAuth('jwt')
   @UseGuards(Guard)
   @Get(':id')
   public async getOneUser(@Param('id') id: number): Promise<{ success: boolean; body: User | void }> {
@@ -83,6 +84,7 @@ export class UsersController {
     description: '비밀번호를 수정 합니다.'
   })
   @ApiBody({ type: UpdateUserDto })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Put(':id/update/pw')
   public async updatePassword(@Param('id') id: number, @Body(ValidationPipe) updateUserDto: UpdateUserDto): Promise<{ success: boolean }> {
@@ -99,6 +101,7 @@ export class UsersController {
     description: '이름 혹은 이메일을 수정 합니다.'
   })
   @ApiBody({ type: UpdateUserDto })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Put(':id/update')
   public async updateName(@Param('id') id: number, @Body(ValidationPipe) updateUserDto: UpdateUserDto): Promise<{ success: boolean }> {
@@ -114,6 +117,7 @@ export class UsersController {
     summary: '사용자 계정삭제',
     description: '사용자 계정을 삭제 합니다.'
   })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Delete(':id')
   public async remove(@Param('id') id: number): Promise<{ success: boolean }> {

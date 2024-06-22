@@ -2,7 +2,7 @@
 import { Controller, Get, Post, Body, Param, Delete, ValidationPipe, NotFoundException, UseGuards } from '@nestjs/common'
 import { AdminCommentService } from './admin-comment.service'
 import { CreateAdminCommentDto } from './dto/create-admin-comment.dto'
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { AdminComment } from './entities/admin-comment.entity'
 import { Guard } from 'src/auth/guard/auth.guard'
 
@@ -16,6 +16,7 @@ export class AdminCommentController {
     description: '관리자 후기를 추가합니다.'
   })
   @ApiBody({ type: CreateAdminCommentDto })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Post()
   public async create(@Body(ValidationPipe) createAdminCommentDto: CreateAdminCommentDto): Promise<{ success: boolean }> {
@@ -30,6 +31,7 @@ export class AdminCommentController {
     summary: '모든 관리자 상담 후기 조회',
     description: '관리자 상담 후기 정보들을 불러옵니다.'
   })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get()
   public findAll() {
@@ -40,6 +42,7 @@ export class AdminCommentController {
     summary: 'ID에 맞는 관리자 상담 후기만 조회',
     description: '관리자 상담 후기 정보를 불러옵니다.'
   })
+  @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get(':id')
   public async findOne(@Param('id') id: number): Promise<{ success: boolean; body: AdminComment }> {
