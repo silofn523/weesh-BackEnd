@@ -8,9 +8,9 @@ export class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number
 
-  @ManyToMany(() => User, (user) => user.chats)
+  @ManyToMany(() => User, (user) => user.chats, { onDelete: 'CASCADE' })
   readonly users: User[]
 
-  @OneToMany(() => Messages, (messages) => messages.chat)
+  @OneToMany(() => Messages, (messages) => messages.chat, { cascade: true })
   readonly messages: Messages
 }

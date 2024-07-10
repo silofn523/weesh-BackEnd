@@ -41,7 +41,7 @@ export class MessagesController {
     }
   }
 
-  @ApiOperation({ summary: '채팅방 별로 메시지 조회 ', description: '여기서 받는 ID는 채팅방 ID를 받습니다' })
+  @ApiOperation({ summary: '챗 방별로 메시지 조회', description: '여기서 받는 ID는 채팅방 ID를 받습니다' })
   @ApiBearerAuth('JWT')
   @UseGuards(Guard)
   @Get(':id')

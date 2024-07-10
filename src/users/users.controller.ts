@@ -21,7 +21,7 @@ export class UsersController {
     await this.usersService.checkUserEmailAndUsername(email, username)
     await this.usersService.createUser(createUserDto)
 
-    return { 
+    return {
       success: true
     }
   }

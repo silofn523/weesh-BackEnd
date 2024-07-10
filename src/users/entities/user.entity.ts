@@ -49,7 +49,7 @@ export class User extends BaseEntity {
   @OneToMany(() => AdminComment, (adminComment) => adminComment.user, { eager: true })
   readonly adminComment: AdminComment[]
 
-  @ManyToMany(() => Chat, (chat) => chat.users)
+  @ManyToMany(() => Chat, (chat) => chat.users, { onDelete: 'CASCADE' })
   @JoinTable()
   readonly chats: Chat[]
 

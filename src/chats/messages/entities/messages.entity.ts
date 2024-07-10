@@ -14,13 +14,17 @@ export class Messages extends BaseEntity {
   @IsNumber()
   readonly chatId: number
 
-  @ManyToOne(() => Chat, (chat) => chat.messages)
-  readonly chat: Chat
-
-  @ManyToOne(() => User, (user) => user.messages)
-  readonly author: User
+  @Column()
+  @IsNumber()
+  readonly authorId: number
 
   @Column()
   @IsString()
   readonly message: string
+
+  @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: 'CASCADE' })
+  readonly chat: Chat
+
+  @ManyToOne(() => User, (user) => user.messages)
+  readonly author: User
 }

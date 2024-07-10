@@ -94,7 +94,11 @@ export class UsersService {
   }
 
   public async getOneName(username: string): Promise<User> {
-    return await this.user.findOneBy({ username })
+    return await this.user.findOne({ 
+      where: {
+        username
+      }
+    })
   }
 
   async deleteUser(id: number): Promise<void> {
